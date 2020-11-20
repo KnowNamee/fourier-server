@@ -38,3 +38,4 @@ out/
 
 ### Project ###
 upload-dir/
+src/main/resources/*
