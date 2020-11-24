@@ -8,22 +8,22 @@ License: GNU GPLv3 http://www.gnu.org/licenses/gpl.html
 import copy
 import math
 
-import numpy as np
+import numpy as np  # type: ignore
 import random
-import scipy
-import scipy.stats
-import scipy.fftpack
+import scipy  # type: ignore
+import scipy.stats  # type: ignore
+import scipy.fftpack  # type: ignore
 import subprocess
 import warnings
 
 from fractions import gcd
-from wave import open as open_wave
-from scipy.io import wavfile
+from wave import open as open_wave  # type: ignore
+from scipy.io import wavfile  # type: ignore
 
-import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt  # type: ignore
 
 try:
-    from IPython.display import Audio
+    from IPython.display import Audio  # type: ignore
 except:
     warnings.warn(
         "Can't import Audio from IPython.display; " "Wave.make_audio() will not work."
@@ -1486,7 +1486,7 @@ class TriangleSignal(Sinusoid):
         return ys
 
 
-from scipy.integrate import cumtrapz
+from scipy.integrate import cumtrapz  # type: ignore
 
 
 class Chirp(Signal):
