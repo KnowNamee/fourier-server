@@ -26,6 +26,30 @@ public class UserDataAccessService {
         jdbcTemplate.update(sql);
     }
 
+    public void insertUserFile(String username, String filename) {
+        String sql = getInsertUserFileSql(username, filename);
+        jdbcTemplate.update(sql);
+    }
+
+    public void deleteUserFile(String username, String filename) {
+        String sql = getDeleteUserFileSql(username, filename);
+        jdbcTemplate.update(sql);
+    }
+
+    private String getDeleteUserFileSql(String username, String filename) {
+        return String.format(
+                "delete from user_files where username = '%s' and filename = '%s';",
+                username,
+                filename);
+    }
+
+    private String getInsertUserFileSql(String username, String filename) {
+        return String.format(
+                "insert into user_files (username, filename) values ('%s', '%s');",
+                username,
+                filename);
+    }
+
     private String getUserCredentialsInsertionSql(User user) {
         return String.format(
                 "insert into users (email, username, password) values  ('%s', '%s', '%s');",
