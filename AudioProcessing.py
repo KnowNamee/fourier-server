@@ -5,6 +5,7 @@ import typing as tp
 # import ffmpeg
 import librosa  # type: ignore
 import numpy as np  # type: ignore
+from midiutil import MIDIFile # type: ignore
 
 from thinkdsp import read_wave, Wave, Spectrum  # type: ignore
 
@@ -161,6 +162,25 @@ def get_notes(midi_dicts_list: tp.List[tp.Dict[int, float]], duration_frame: flo
             result_notes += current_notes
     return result_notes
 
+track = 0
+channel = 0
+tempo = 240   # In BPM
+bps = tempo / 60
+volume = 100  # 0-127, as per the MIDI standard
+
+MyMIDI = MIDIFile(1)  # One track, defaults to format 1 (tempo track is created automatically)
+MyMIDI.addTempo(track, 0, tempo)
+
+def MidiWriter(notes):
+    max_amp = 0
+    for note in notes:
+        if (max_amp < note.amplitude):
+            max_amp = note.amplitude
+    for note in notes:
+        MyMIDI.addNote(track, channel, note.midi_number, note.start*bps, note.duration*bps, volume)
+    with open("output1.mid", "wb") as output_file:
+        MyMIDI.writeFile(output_file)
+
 
 def main() -> None:
     duration_frame = 0.25
@@ -168,6 +188,7 @@ def main() -> None:
         "Yiruma - River Flows in You.wav", duration_frame)
     midi_dicts_list: tp.List[tp.Dict[int, float]] = get_dicts_from_lists(midis_and_amplitudes)
     notes: tp.List[Note] = get_notes(midi_dicts_list, duration_frame)
+    MidiWriter(notes)
 
 
 if __name__ == "__main__":
