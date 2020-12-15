@@ -40,9 +40,11 @@ public class BucketController {
     @DeleteMapping("/delete")
     @PreAuthorize("hasAuthority('file:delete')")
     public ResponseEntity<?> delete(@RequestPart("filename") String filename, Principal principal) {
+        // TODO fix filename error (/r/n adds to every filename sent from user)
         try {
-            amazonClientService.deleteFile(filename);
-            userFilesService.deleteFile(principal.getName(), filename);
+            String correctFilename = filename.substring(0, filename.length() - 2);
+            amazonClientService.deleteFile(correctFilename);
+            userFilesService.deleteFile(principal.getName(), correctFilename);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
