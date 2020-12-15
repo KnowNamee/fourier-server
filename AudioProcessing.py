@@ -12,7 +12,7 @@ MIDI_FREQUENCIES = librosa.midi_to_hz(np.arange(36, 109))
 
 
 @dataclasses.dataclass
-class Midi:
+class Note:
     midi_number: int
     start: float
     duration: float
@@ -95,14 +95,12 @@ def process_frequencies(raw_frequencies: tp.List[tp.Tuple[float, float]]) -> tp.
 # sound = AudioSegment.from_mp3(mp3_path)
 # sound.export(wav_path, format="wav")
 
-def main() -> None:
-    wav_path: str = "Yiruma - River Flows in You.wav"
+def get_midis_with_amplitudes(wav_path: str, duration_frame: float) -> tp.List[tp.List[tp.Tuple[int, float]]]:
     wave: Wave = read_wave(wav_path)
     wave.normalize()
     song_duration: float = wave.duration
 
-    start: float = 0
-    duration_frame: float = 0.25
+    start = 0.0
     midis_and_amplitudes: tp.List[tp.List[tp.Tuple[int, float]]] = []
     # with open('output.txt', 'w') as f:
     while start <= song_duration - duration_frame:
@@ -114,6 +112,62 @@ def main() -> None:
         raw_frequencies: tp.List[tp.Tuple[float, float]] = spectrum.peaks()[:15]
         midis_and_amplitudes.append(process_frequencies(raw_frequencies))
         start += duration_frame
+    return midis_and_amplitudes
+
+
+def get_dicts_from_lists(list_of_lists: tp.List[tp.List[tp.Tuple[int, float]]]) -> tp.List[tp.Dict[int, float]]:
+    result_list: tp.List[tp.Dict[int, float]] = []
+    for list_of_tuples in list_of_lists:
+        inner_dict: tp.Dict[int, float] = {}
+        for pair in list_of_tuples:
+            inner_dict[pair[0]] = pair[1]
+        result_list.append(inner_dict)
+    return result_list
+
+
+def get_notes(midi_dicts_list: tp.List[tp.Dict[int, float]], duration_frame: float) -> tp.List[Note]:
+    result_notes: tp.List[Note] = []
+    minimal_difference = 15.0
+    for i, midi_dict in enumerate(midi_dicts_list):
+        for midi, amplitude in midi_dict.items():
+            amplitudes: tp.List[float] = [amplitude]
+            counter: int = i + 1
+            while counter < len(midi_dicts_list) and midi in midi_dicts_list[counter]:
+                amplitudes.append(midi_dicts_list[counter][midi])
+                midi_dicts_list[counter].pop(midi)
+                counter += 1
+            if len(amplitudes) == 1:
+                continue
+            start_index = 0
+            previous_amplitude: float = amplitudes[0]
+            current_notes: tp.List[Note] = []
+            for j in range(1, len(amplitudes)):
+                if abs(amplitudes[j] - previous_amplitude) > minimal_difference \
+                        and previous_amplitude < amplitudes[j]:
+                    duration: float = (j - 1 - start_index)
+                    if duration == 0:
+                        previous_amplitude = amplitudes[j]
+                        start_index = j
+                        continue
+                    current_notes.append(
+                        Note(midi, (i + start_index) * duration_frame, duration * duration_frame,
+                             amplitudes[start_index]))
+                    start_index = j
+                previous_amplitude = amplitudes[j]
+            if start_index + 1 < len(amplitudes):
+                current_notes.append(
+                    Note(midi, (i + start_index) * duration_frame, (len(amplitudes) - 1 - start_index) * duration_frame,
+                         amplitudes[start_index]))
+            result_notes += current_notes
+    return result_notes
+
+
+def main() -> None:
+    duration_frame = 0.25
+    midis_and_amplitudes: tp.List[tp.List[tp.Tuple[int, float]]] = get_midis_with_amplitudes(
+        "Yiruma - River Flows in You.wav", duration_frame)
+    midi_dicts_list: tp.List[tp.Dict[int, float]] = get_dicts_from_lists(midis_and_amplitudes)
+    notes: tp.List[Note] = get_notes(midi_dicts_list, duration_frame)
 
 
 if __name__ == "__main__":
