@@ -1,4 +1,4 @@
 libsndfile1
 libsndfile1-dev
-deb-src ppa:mscore-ubuntu/mscore-stable
+deb ppa:mscore-ubuntu/mscore-stable
 musescore
