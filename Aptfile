@@ -2,4 +2,6 @@ libsndfile1
 libsndfile1-dev
 libpulse0
 libpulse0-dev
+libpulsedsp
+libpulsedsp-dev
 musescore
