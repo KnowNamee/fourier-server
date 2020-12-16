@@ -5,6 +5,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Objects;
 
 @Service
@@ -18,6 +20,7 @@ public class PythonService {
     }
 
     public String convertToPdf(MultipartFile multipartFile) throws IOException {
+        Files.createDirectories(Path.of("audio_processing/temp"));
         String filename = multipartToFile(multipartFile);
         String newFilename = filename.substring(0, filename.lastIndexOf('.')) + ".pdf";
         String tempFolder = pythonConfig.getTempFolder().substring(pythonConfig.getTempFolder().indexOf('/') + 1);
