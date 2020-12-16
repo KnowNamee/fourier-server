@@ -20,7 +20,6 @@ public class PythonService {
     }
 
     public String convertToPdf(MultipartFile multipartFile) throws IOException {
-        Runtime.getRuntime().exec("mkdir audio_processing/temp");
         String filename = multipartToFile(multipartFile);
         String newFilename = filename.substring(0, filename.lastIndexOf('.')) + ".pdf";
         String tempFolder = pythonConfig.getTempFolder().substring(pythonConfig.getTempFolder().indexOf('/') + 1);
@@ -32,8 +31,15 @@ public class PythonService {
         Process p = Runtime.getRuntime().exec(command);
         BufferedReader stdError = new BufferedReader(new
                 InputStreamReader(p.getErrorStream()));
-        while (stdError.readLine() != null) { }
-        return newFilename;
+        String answer;
+        String s;
+        StringBuilder answerBuilder = new StringBuilder();
+        while ((s = stdError.readLine()) != null) {
+            answerBuilder.append(s);
+        }
+        answer = answerBuilder.toString();
+//        return newFilename;
+        return answer;
     }
 
     private String multipartToFile(MultipartFile multipartFile) throws IOException {
@@ -41,7 +47,6 @@ public class PythonService {
         FileOutputStream fos = new FileOutputStream(file);
         fos.write(multipartFile.getBytes());
         fos.close();
-        String filename = file.getName();
         file.createNewFile();
         return file.getName();
     }
