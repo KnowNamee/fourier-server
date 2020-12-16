@@ -1,32 +1,43 @@
 package com.example.demo.model.python;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.swing.*;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.Date;
 import java.util.Objects;
 
 @Service
 public class PythonService {
 
-    public PythonService() { }
+    private PythonConfig pythonConfig;
 
-    public File convertToPdf (MultipartFile multipartFile) throws IOException {
-        Process p = Runtime.getRuntime().exec(
-                "C:\\Users\\Администратор\\AppData\\Local\\Programs\\Python\\Python37\\python.exe PyTest.py");
-        return multipartToFile(multipartFile);
+    @Autowired
+    public PythonService(PythonConfig pythonConfig) {
+        this.pythonConfig = pythonConfig;
     }
 
-    private File multipartToFile(MultipartFile multipartFile) throws IOException {
-        File file = new File(Objects.requireNonNull(multipartFile.getOriginalFilename()));
+    public String convertToPdf (MultipartFile multipartFile) throws IOException {
+        String filename = multipartToFile(multipartFile);
+        String tempFolder = pythonConfig.getTempFolder().substring(pythonConfig.getTempFolder().indexOf('/') + 1);
+        Process p = Runtime.getRuntime().exec(String.format("%s \"%s\" \"%s\" \"%s\"",
+                pythonConfig.getInterpreter(),
+                pythonConfig.getScript(),
+                tempFolder + filename,
+                tempFolder + filename.substring(0, filename.lastIndexOf('.')) + ".pdf"));
+        return null;
+    }
+
+    private String multipartToFile(MultipartFile multipartFile) throws IOException {
+        File file = new File(pythonConfig.getTempFolder() + Objects.requireNonNull(multipartFile.getOriginalFilename()));
         FileOutputStream fos = new FileOutputStream(file);
         fos.write(multipartFile.getBytes());
         fos.close();
-        return file;
+        String filename = file.getName();
+        file.createNewFile();
+        return file.getName();
     }
 
 }
