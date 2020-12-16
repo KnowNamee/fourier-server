@@ -1,11 +1,18 @@
 import argparse
 import subprocess
 from pathlib import Path
+from pydub import AudioSegment
 
 import mido
 
 
 def process_audio(infile: str, outfile: str) -> None:
+    if Path(infile).suffix == ".mp3":
+        sound = AudioSegment.from_mp3(str(Path(
+            __file__).parent.absolute()) + "/" + infile)
+        sound.export(str(Path(
+            __file__).parent.absolute()) + "/" + "infile.wav", format="wav")
+        infile = "infile.wav"
     switch_to_directory: str = "cd " + "'" + str(Path(
         __file__).parent.absolute()) + "'" + "\n"
     subprocess.run([switch_to_directory + "audio-to-midi '" + infile + "' -b 120 -t 250 -T -14 -s"], shell=True)
