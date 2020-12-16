@@ -6,9 +6,6 @@ from io import open
 
 here = path.abspath(path.dirname(__file__))
 
-with open(path.join(here, "README.md"), encoding="utf-8") as f:
-    long_description = f.read()
-
 requirements = []
 with open(path.join(here, "requirements.txt"), "r") as infile:
     requirements = [line for line in infile.read().split("\n") if line]
@@ -17,8 +14,6 @@ setup(
     name="audio_to_midi",
     version="2020.7",
     description="Convert audio to multichannel MIDI.",
-    long_description=long_description,
-    long_description_content_type="text/markdown",
     url="https://github.com/NFJones/audio-to-midi",
     author="Neil F Jones",
     classifiers=[

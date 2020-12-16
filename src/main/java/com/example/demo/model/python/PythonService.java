@@ -4,9 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.util.Objects;
 
 @Service
@@ -19,14 +17,19 @@ public class PythonService {
         this.pythonConfig = pythonConfig;
     }
 
-    public String convertToPdf (MultipartFile multipartFile) throws IOException {
+    public String convertToPdf(MultipartFile multipartFile) throws IOException, InterruptedException {
         String filename = multipartToFile(multipartFile);
         String tempFolder = pythonConfig.getTempFolder().substring(pythonConfig.getTempFolder().indexOf('/') + 1);
-        Process p = Runtime.getRuntime().exec(String.format("%s \"%s\" \"%s\" \"%s\"",
+        String command = String.format("%s %s %s %s",
                 pythonConfig.getInterpreter(),
                 pythonConfig.getScript(),
                 tempFolder + filename,
-                tempFolder + filename.substring(0, filename.lastIndexOf('.')) + ".pdf"));
+                tempFolder + filename.substring(0, filename.lastIndexOf('.')) + ".pdf");
+        Process p = Runtime.getRuntime().exec(command);
+        BufferedReader stdError = new BufferedReader(new
+                InputStreamReader(p.getErrorStream()));
+        while (stdError.readLine() != null) {
+        }
         return null;
     }
 

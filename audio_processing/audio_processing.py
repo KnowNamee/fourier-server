@@ -15,7 +15,7 @@ def process_audio(infile: str, outfile: str) -> None:
         infile = infile[:-4] + ".wav"
     switch_to_directory: str = "cd " + "'" + str(Path(
         __file__).parent.absolute()) + "'" + "\n"
-    subprocess.run([switch_to_directory + "audio-to-midi '" + infile + "' -b 120 -t 250 -T -12 -s"], shell=True)
+    subprocess.run([switch_to_directory + "audio-to-midi '" + infile + "' -b 120 -t 250 -T -12 -s -n"], shell=True)
     mid_file = str(Path(__file__).parent.absolute()) + "/" + str(Path(infile).name) + ".mid"
     initial = mido.MidiFile(mid_file, clip=True)
     result_midi = mido.MidiFile()
