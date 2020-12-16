@@ -9,8 +9,8 @@ import java.util.stream.Collectors;
 import static com.example.demo.security.authorities.ApplicationUserPermission.*;
 
 public enum ApplicationUserRole {
-    ADMIN(Sets.newHashSet(FILE_UPLOAD, FILE_DOWNLOAD)),
-    USER(Sets.newHashSet(FILE_UPLOAD, FILE_DOWNLOAD));
+    ADMIN(Sets.newHashSet(FILE_UPLOAD, FILE_DOWNLOAD, FILE_DELETE)),
+    USER(Sets.newHashSet(FILE_UPLOAD, FILE_DOWNLOAD, FILE_DELETE));
 
     private final Set<ApplicationUserPermission> permissions;
 

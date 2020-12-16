@@ -2,7 +2,8 @@ package com.example.demo.security.authorities;
 
 public enum ApplicationUserPermission {
     FILE_UPLOAD("file:upload"),
-    FILE_DOWNLOAD("file:download");
+    FILE_DOWNLOAD("file:download"),
+    FILE_DELETE("file:delete");
 
     private final String permission;
 
