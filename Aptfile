@@ -1,5 +1,5 @@
 libsndfile1
 libsndfile1-dev
-libpulsecommon-11.1.so
-libpulsecommon-11.1.so-dev
+libpulse0
+libpulse0-dev
 musescore
