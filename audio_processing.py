@@ -1,9 +1,9 @@
 import argparse
 import subprocess
 from pathlib import Path
-from pydub import AudioSegment
 
 import mido
+from pydub import AudioSegment
 
 
 def process_audio(infile: str, outfile: str) -> None:
@@ -15,7 +15,7 @@ def process_audio(infile: str, outfile: str) -> None:
         infile = "infile.wav"
     switch_to_directory: str = "cd " + "'" + str(Path(
         __file__).parent.absolute()) + "'" + "\n"
-    subprocess.run([switch_to_directory + "audio-to-midi '" + infile + "' -b 120 -t 250 -T -14 -s"], shell=True)
+    subprocess.run([switch_to_directory + "audio-to-midi '" + infile + "' -b 120 -t 250 -T -12 -s"], shell=True)
     initial = mido.MidiFile(infile + ".mid", clip=True)
     result_midi = mido.MidiFile()
     result_midi.add_track('')
