@@ -31,7 +31,7 @@ public class AmazonClientService {
     @PostConstruct
     private void InitializeS3Client() {
         AWSCredentials credentials = new BasicAWSCredentials(clientConfig.getAccessKey(),
-                                                             clientConfig.getSecretKey());
+                clientConfig.getSecretKey());
         s3Client = new AmazonS3Client(credentials);
     }
 
@@ -39,13 +39,12 @@ public class AmazonClientService {
         s3Client.deleteObject(new DeleteObjectRequest(clientConfig.getBucketName(), filename));
     }
 
-    public String uploadFile(MultipartFile multipartFile) throws IOException {
+    public String uploadFile(File pdfFile) throws IOException {
         String url = "";
-        File file = multipartToFile(multipartFile);
-        String filename = generateFilename(multipartFile);
-        url = String.format("%s/%s/%s", clientConfig.getEndpointUrl(), clientConfig.getBucketName(), filename);
-        s3Client.putObject(new PutObjectRequest(clientConfig.getBucketName(), filename, file));
-        file.delete();
+        String fileName = generateFilename(pdfFile);
+        url = String.format("%s/%s/%s", clientConfig.getEndpointUrl(), clientConfig.getBucketName(), fileName);
+        s3Client.putObject(new PutObjectRequest(clientConfig.getBucketName(), fileName, pdfFile));
+        pdfFile.delete();
         return url;
     }
 
@@ -57,9 +56,9 @@ public class AmazonClientService {
         return file;
     }
 
-    private String generateFilename(MultipartFile multipartFile) {
+    private String generateFilename(File file) {
         return new Date().getTime() + "-" + Objects.requireNonNull(
-                multipartFile.getOriginalFilename()).replace(" ", "_");
+                file.getName()).replace(" ", "_");
     }
 
 }

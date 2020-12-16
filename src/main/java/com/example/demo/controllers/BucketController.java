@@ -1,6 +1,7 @@
 package com.example.demo.controllers;
 
 import com.example.demo.model.amazon.AmazonClientService;
+import com.example.demo.model.python.PythonService;
 import com.example.demo.model.user.service.UserFilesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -8,6 +9,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.security.Principal;
 
 @RestController
@@ -16,11 +18,13 @@ public class BucketController {
 
     private AmazonClientService amazonClientService;
     private UserFilesService userFilesService;
+    private PythonService pythonService;
 
     @Autowired
-    public BucketController(AmazonClientService amazonClientService, UserFilesService userFilesService) {
+    public BucketController(AmazonClientService amazonClientService, UserFilesService userFilesService, PythonService pythonService) {
         this.amazonClientService = amazonClientService;
         this.userFilesService = userFilesService;
+        this.pythonService = pythonService;
     }
 
     @PutMapping("/upload")
@@ -29,7 +33,8 @@ public class BucketController {
         // TODO Add python file processing here
         String url = "";
         try {
-            url = amazonClientService.uploadFile(multipartFile);
+            File pdf = pythonService.convertToPdf(multipartFile);
+            url = amazonClientService.uploadFile(pdf);
             userFilesService.addFile(principal.getName(), url.substring(url.lastIndexOf("/") + 1));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
