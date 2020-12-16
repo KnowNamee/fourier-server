@@ -17,20 +17,20 @@ public class PythonService {
         this.pythonConfig = pythonConfig;
     }
 
-    public String convertToPdf(MultipartFile multipartFile) throws IOException, InterruptedException {
+    public String convertToPdf(MultipartFile multipartFile) throws IOException {
         String filename = multipartToFile(multipartFile);
+        String newFilename = filename.substring(0, filename.lastIndexOf('.')) + ".pdf";
         String tempFolder = pythonConfig.getTempFolder().substring(pythonConfig.getTempFolder().indexOf('/') + 1);
         String command = String.format("%s %s %s %s",
                 pythonConfig.getInterpreter(),
                 pythonConfig.getScript(),
                 tempFolder + filename,
-                tempFolder + filename.substring(0, filename.lastIndexOf('.')) + ".pdf");
+                tempFolder + newFilename);
         Process p = Runtime.getRuntime().exec(command);
         BufferedReader stdError = new BufferedReader(new
                 InputStreamReader(p.getErrorStream()));
-        while (stdError.readLine() != null) {
-        }
-        return null;
+        while (stdError.readLine() != null) { }
+        return newFilename;
     }
 
     private String multipartToFile(MultipartFile multipartFile) throws IOException {

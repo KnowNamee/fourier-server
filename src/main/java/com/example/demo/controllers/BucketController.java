@@ -33,9 +33,9 @@ public class BucketController {
         // TODO Add python file processing here
         String url = "";
         try {
-            url = pythonService.convertToPdf(multipartFile);
-//            url = amazonClientService.uploadFile(pdf);
-//            userFilesService.addFile(principal.getName(), url.substring(url.lastIndexOf("/") + 1));
+            String pdfFilename = pythonService.convertToPdf(multipartFile);
+            url = amazonClientService.uploadFile(new File(pdfFilename));
+            userFilesService.addFile(principal.getName(), url.substring(url.lastIndexOf("/") + 1));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
