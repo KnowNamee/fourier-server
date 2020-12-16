@@ -12,14 +12,15 @@ import java.util.Objects;
 
 @Service
 public class PythonService {
-    public PythonService() {
-    }
+
+    public PythonService() { }
+
     public File convertToPdf (MultipartFile multipartFile) throws IOException {
         Process p = Runtime.getRuntime().exec(
                 "C:\\Users\\Администратор\\AppData\\Local\\Programs\\Python\\Python37\\python.exe PyTest.py");
-//        p.
         return multipartToFile(multipartFile);
     }
+
     private File multipartToFile(MultipartFile multipartFile) throws IOException {
         File file = new File(Objects.requireNonNull(multipartFile.getOriginalFilename()));
         FileOutputStream fos = new FileOutputStream(file);
@@ -27,4 +28,5 @@ public class PythonService {
         fos.close();
         return file;
     }
+
 }
