@@ -1,7 +1,6 @@
 ###Python###
 \.idea/
 __pycache__/
-*.txt
 
 HELP.md
 .gradle
