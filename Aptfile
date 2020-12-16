@@ -1,5 +1,5 @@
 libsndfile1
 libsndfile1-dev
-deb http://ftp.de.debian.org/debian/dists/stable main contrib non-free
-deb http://ftp.de.debian.org/debian/dists/jessie/main/
+libpulsecommon-11.1.so
+libpulsecommon-11.1.so-dev
 musescore
