@@ -2,5 +2,6 @@ libsndfile1
 libsndfile1-dev
 libpulse0
 libpulsedsp
-deb https://bintray.com/antoniobl/musescore-custom-nightlies/download_file?file_path=MuseScoreDev-201804161802-armhf-34d2fa5-armhf.AppImage
+deb http://ppa.launchpad.net/mscore-ubuntu/mscore3-stable/ubuntu bionic main 
+deb-src http://ppa.launchpad.net/mscore-ubuntu/mscore3-stable/ubuntu bionic main 
 musescore
