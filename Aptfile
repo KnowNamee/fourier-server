@@ -1,0 +1,10 @@
+libsndfile1
+libsndfile1-dev
+libpulse0
+libpulsedsp
+https://build.opensuse.org/project/show/home:mirabile:mscore 
+deb http://ppa.launchpad.net/mscore-ubuntu/mscore-stable/ubuntu bionic main 
+deb-src http://ppa.launchpad.net/mscore-ubuntu/mscore-stable/ubuntu bionic main 
+deb http://ppa.launchpad.net/mscore-ubuntu/mscore3-stable/ubuntu bionic main 
+deb-src http://ppa.launchpad.net/mscore-ubuntu/mscore3-stable/ubuntu bionic main 
+musescore
