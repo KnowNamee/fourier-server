@@ -16,8 +16,7 @@ public class PythonService {
     public PythonService() { }
 
     public File convertToPdf (MultipartFile multipartFile) throws IOException {
-        Process p = Runtime.getRuntime().exec(
-                "C:\\Users\\Администратор\\AppData\\Local\\Programs\\Python\\Python37\\python.exe PyTest.py");
+        // TODO convert to pdf
         return multipartToFile(multipartFile);
     }
 
