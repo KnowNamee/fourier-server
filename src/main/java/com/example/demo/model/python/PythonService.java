@@ -15,8 +15,7 @@ public class PythonService {
 
     public PythonService() { }
 
-    public File convertToPdf (MultipartFile multipartFile) throws IOException {
-        // TODO convert to pdf
+    public File convertToPdf(MultipartFile multipartFile) throws IOException {
         return multipartToFile(multipartFile);
     }
 
